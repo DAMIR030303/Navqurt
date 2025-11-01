@@ -54,6 +54,18 @@ cd /home/damir/Desktop/mobil_dasturlar/Navqurt_maui/navqurt_flutter
 ./start_android.sh flutter_android_34
 ```
 
+**iOS (macOS'da):**
+```bash
+cd /home/damir/Desktop/mobil_dasturlar/Navqurt_maui/navqurt_flutter
+./start_ios.sh [SIMULATOR_NAME]
+# Masalan:
+./start_ios.sh "iPhone 15 Pro"
+# yoki
+./start_ios.sh
+```
+
+⚠️ **Eslatma:** iOS development uchun macOS va Xcode kerak!
+
 ### Variant 2: Qo'lda
 
 **Linux Desktop:**
@@ -79,6 +91,21 @@ export PATH="$HOME/flutter/bin:$PATH"
 flutter run -d android
 ```
 
+**iOS (macOS'da):**
+```bash
+# CocoaPods dependencies ni o'rnatish
+cd ios
+pod install
+cd ..
+
+# Flutter ilovasini ishga tushirish
+cd /home/damir/Desktop/mobil_dasturlar/Navqurt_maui/navqurt_flutter
+export PATH="$HOME/flutter/bin:$PATH"
+flutter run -d ios
+```
+
+⚠️ **Eslatma:** iOS development uchun macOS, Xcode va CocoaPods kerak!
+
 **Batafsil yo'riqnoma:** `RUN_GUIDE.md` faylini o'qing.
 
 ## 📱 Platforma qo'llab-quvvatlash
@@ -88,6 +115,7 @@ flutter run -d android
 | Linux Desktop | ✅ To'liq |
 | Android | ✅ To'liq |
 | Android Emulator | ✅ To'liq |
+| iOS (macOS'da) | ✅ Tayyor (macOS va Xcode kerak) |
 
 ## 🛠️ Texnologiyalar
 
