@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/product.dart';
 import '../providers/language_provider.dart';
+import '../providers/cart_provider.dart';
 import 'package:provider/provider.dart';
 
 /// Mahsulot kartasi widget'i
@@ -18,6 +19,7 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final languageProvider = Provider.of<LanguageProvider>(context);
+    final cartProvider = Provider.of<CartProvider>(context);
     final currencyFormat = NumberFormat.currency(
       symbol: 'so\'m',
       decimalDigits: 0,
@@ -112,7 +114,23 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: onTap,
+                        onPressed: () {
+                          // Tez savatga qo'shish
+                          cartProvider.addItem(product);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                languageProvider.translate(
+                                  uz: '$productName savatga qo\'shildi',
+                                  ru: '$productName добавлен в корзину',
+                                  en: '$productName added to cart',
+                                ),
+                              ),
+                              backgroundColor: Colors.green,
+                              duration: const Duration(seconds: 2),
+                            ),
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF2563EB),
                           foregroundColor: Colors.white,
@@ -123,9 +141,9 @@ class ProductCard extends StatelessWidget {
                         ),
                         child: Text(
                           languageProvider.translate(
-                            uz: 'Buyurtma',
-                            ru: 'Заказать',
-                            en: 'Order',
+                            uz: 'Savatga qo\'shish',
+                            ru: 'В корзину',
+                            en: 'Add to Cart',
                           ),
                         ),
                       ),

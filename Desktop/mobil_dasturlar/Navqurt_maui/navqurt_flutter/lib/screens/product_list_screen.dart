@@ -4,6 +4,7 @@ import '../widgets/product_card.dart';
 import '../providers/language_provider.dart';
 import '../providers/cart_provider.dart';
 import 'cart_screen.dart';
+import 'product_detail_screen.dart';
 import 'package:provider/provider.dart';
 
 /// Mahsulotlar ro'yxati ekrani
@@ -145,34 +146,12 @@ class ProductListScreen extends StatelessWidget {
                 return ProductCard(
                   product: product,
                   onTap: () {
-                    // Savatga qo'shish
-                    cartProvider.addItem(product);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          languageProvider.translate(
-                            uz: '${product.name} savatga qo\'shildi',
-                            ru: '${product.nameRu} добавлен в корзину',
-                            en: '${product.nameEn} added to cart',
-                          ),
-                        ),
-                        backgroundColor: Colors.green,
-                        duration: const Duration(seconds: 2),
-                        action: SnackBarAction(
-                          label: languageProvider.translate(
-                            uz: 'Savat',
-                            ru: 'Корзина',
-                            en: 'Cart',
-                          ),
-                          textColor: Colors.white,
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const CartScreen(),
-                              ),
-                            );
-                          },
+                    // Mahsulot detallari ekraniga o'tish
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProductDetailScreen(
+                          product: product,
                         ),
                       ),
                     );
