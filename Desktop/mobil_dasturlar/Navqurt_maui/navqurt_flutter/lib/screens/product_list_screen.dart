@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../services/product_service.dart';
 import '../widgets/product_card.dart';
 import '../providers/language_provider.dart';
+import '../providers/cart_provider.dart';
+import 'cart_screen.dart';
 import 'package:provider/provider.dart';
 
 /// Mahsulotlar ro'yxati ekrani
@@ -11,6 +13,7 @@ class ProductListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final languageProvider = Provider.of<LanguageProvider>(context);
+    final cartProvider = Provider.of<CartProvider>(context);
     final products = ProductService.getMockProducts();
 
     return Scaffold(
@@ -27,6 +30,47 @@ class ProductListScreen extends StatelessWidget {
         foregroundColor: Colors.white,
         elevation: 0,
         actions: [
+          // Savat icon (badge bilan)
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.shopping_cart),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CartScreen(),
+                    ),
+                  );
+                },
+              ),
+              if (cartProvider.itemCount > 0)
+                Positioned(
+                  right: 8,
+                  top: 8,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    constraints: const BoxConstraints(
+                      minWidth: 16,
+                      minHeight: 16,
+                    ),
+                    child: Text(
+                      '${cartProvider.itemCount}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+            ],
+          ),
           // Til o'zgartirish tugmasi
           PopupMenuButton<String>(
             icon: const Icon(Icons.language),
@@ -101,60 +145,35 @@ class ProductListScreen extends StatelessWidget {
                 return ProductCard(
                   product: product,
                   onTap: () {
-                    // Buyurtma dialog
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text(
-                          languageProvider.translate(
-                            uz: 'Buyurtma berish',
-                            ru: 'Сделать заказ',
-                            en: 'Place Order',
-                          ),
-                        ),
+                    // Savatga qo'shish
+                    cartProvider.addItem(product);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
                         content: Text(
                           languageProvider.translate(
-                            uz: '${product.name} mahsulotini buyurtma qilmoqchimisiz?',
-                            ru: 'Хотите заказать товар ${product.nameRu}?',
-                            en: 'Do you want to order ${product.nameEn}?',
+                            uz: '${product.name} savatga qo\'shildi',
+                            ru: '${product.nameRu} добавлен в корзину',
+                            en: '${product.nameEn} added to cart',
                           ),
                         ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: Text(
-                              languageProvider.translate(
-                                uz: 'Bekor qilish',
-                                ru: 'Отмена',
-                                en: 'Cancel',
-                              ),
-                            ),
+                        backgroundColor: Colors.green,
+                        duration: const Duration(seconds: 2),
+                        action: SnackBarAction(
+                          label: languageProvider.translate(
+                            uz: 'Savat',
+                            ru: 'Корзина',
+                            en: 'Cart',
                           ),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    languageProvider.translate(
-                                      uz: 'Buyurtma muvaffaqiyatli qabul qilindi!',
-                                      ru: 'Заказ успешно принят!',
-                                      en: 'Order placed successfully!',
-                                    ),
-                                  ),
-                                  backgroundColor: Colors.green,
-                                ),
-                              );
-                            },
-                            child: Text(
-                              languageProvider.translate(
-                                uz: 'Tasdiqlash',
-                                ru: 'Подтвердить',
-                                en: 'Confirm',
+                          textColor: Colors.white,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const CartScreen(),
                               ),
-                            ),
-                          ),
-                        ],
+                            );
+                          },
+                        ),
                       ),
                     );
                   },
