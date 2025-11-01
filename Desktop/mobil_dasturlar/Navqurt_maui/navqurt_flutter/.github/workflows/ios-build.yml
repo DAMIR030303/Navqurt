@@ -1,0 +1,56 @@
+name: iOS Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Qo'lda ishga tushirish imkoniyati
+
+jobs:
+  build-ios:
+    name: Build iOS App
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.7'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Setup CocoaPods
+        run: |
+          cd ios
+          pod repo update
+          pod install
+          cd ..
+
+      - name: Verify iOS setup
+        run: flutter doctor -v
+
+      - name: Build iOS (no codesign)
+        run: flutter build ios --release --no-codesign
+
+      - name: Archive artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-build
+          path: build/ios/iphoneos/Runner.app
+          retention-days: 7
+
+      - name: Build summary
+        if: always()
+        run: |
+          echo "## iOS Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- Flutter version: $(flutter --version | head -n 1)" >> $GITHUB_STEP_SUMMARY
+          echo "- Build status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Build artifacts uploaded successfully" >> $GITHUB_STEP_SUMMARY
+

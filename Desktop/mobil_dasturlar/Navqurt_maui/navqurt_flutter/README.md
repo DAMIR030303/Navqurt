@@ -179,11 +179,69 @@ flutter build apk --release
 flutter build linux --release
 ```
 
+### iOS IPA yaratish (macOS'da)
+
+```bash
+# CocoaPods dependencies ni o'rnatish
+cd ios
+pod install
+cd ..
+
+# Release build
+flutter build ios --release
+
+# Xcode orqali archive qilish
+open ios/Runner.xcworkspace
+# Xcode'da: Product > Archive > Distribute App
+```
+
+⚠️ **Eslatma:** iOS build uchun macOS va Xcode kerak!
+
 ## 🧪 Test qilish
 
 ```bash
 flutter test
 flutter analyze
+```
+
+## 🍎 iOS Development Linux'da (Alternativ Yechimlar)
+
+### ❌ Muammo
+Xcode **faqat macOS'da** ishlaydi va Linux'da o'rnatib bo'lmaydi.
+
+### ✅ Alternativ Yechimlar
+
+#### 1. **macOS Virtual Machine (VM)**
+- **VirtualBox** yoki **QEMU/KVM** orqali macOS VM yaratish
+- To'liq funksional, lekin resurs talab qiladi
+- Qo'llanma: [macOS VM setup guide](https://github.com/kholia/OSX-KVM)
+
+#### 2. **Remote macOS Server**
+- Bulut xizmatlaridan macOS instansiyasi
+- **MacStadium**, **AWS EC2 Mac instances**, **Scaleway**
+- Oylik to'lov talab qiladi (~$100+/oy)
+
+#### 3. **CI/CD Xizmatlari** (Tavsiya etiladi! ✅)
+- **GitHub Actions** - macOS runner'lari bepul (limit bilan)
+- **Codemagic** - Flutter uchun maxsus
+- **Bitrise** - Mobile CI/CD
+- **AppCircle** - iOS/Android build
+
+#### 4. **GitHub Actions Misoli**
+
+`.github/workflows/ios-build.yml` yaratish:
+```yaml
+name: iOS Build
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+      - run: flutter pub get
+      - run: cd ios && pod install && cd ..
+      - run: flutter build ios --release
 ```
 
 ## 📝 Keyingi qadamlar
@@ -195,7 +253,9 @@ flutter analyze
 - [ ] Buyurtmalar tarixi
 - [ ] Push notification'lar
 - [ ] Local storage (SharedPreferences)
+- [ ] GitHub Actions iOS build workflow
 
 ## 🎉 Natija
 
 NavQurut mini app **to'liq tayyor** va Arch Linux'da ishlaydi!
+iOS uchun GitHub Actions yoki boshqa CI/CD xizmatlaridan foydalanish mumkin!
