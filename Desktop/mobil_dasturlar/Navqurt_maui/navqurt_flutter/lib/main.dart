@@ -5,19 +5,30 @@ import 'providers/language_provider.dart';
 import 'providers/cart_provider.dart';
 import 'screens/product_list_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Cart'ni yuklash
+  final cartProvider = CartProvider();
+  await cartProvider.loadCart();
+  
+  runApp(MyApp(cartProvider: cartProvider));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final CartProvider cartProvider;
+
+  const MyApp({
+    super.key,
+    required this.cartProvider,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => LanguageProvider()),
-        ChangeNotifierProvider(create: (context) => CartProvider()),
+        ChangeNotifierProvider.value(value: cartProvider),
       ],
       child: Consumer<LanguageProvider>(
         builder: (context, languageProvider, child) {

@@ -5,11 +5,13 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:navqurt_flutter/main.dart';
 import 'package:navqurt_flutter/services/product_service.dart';
+import 'package:navqurt_flutter/providers/cart_provider.dart';
 
 void main() {
   testWidgets('App yuklanadi va mahsulotlar ro\'yxati ko\'rsatiladi', (WidgetTester tester) async {
     // App ni yuklash
-    await tester.pumpWidget(const MyApp());
+    final cartProvider = CartProvider();
+    await tester.pumpWidget(MyApp(cartProvider: cartProvider));
     await tester.pumpAndSettle();
 
     // AppBar'da "NavQurut" matni borligini tekshirish
@@ -24,7 +26,8 @@ void main() {
   });
 
   testWidgets('Barcha mahsulotlar ro\'yxatda ko\'rsatiladi', (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp());
+    final cartProvider = CartProvider();
+    await tester.pumpWidget(MyApp(cartProvider: cartProvider));
     await tester.pumpAndSettle();
 
     // Barcha mahsulotlarni tekshirish (ListView'da scroll qilish kerak)
@@ -52,7 +55,8 @@ void main() {
   });
 
   testWidgets('Til o\'zgartirish tugmasi mavjud', (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp());
+    final cartProvider = CartProvider();
+    await tester.pumpWidget(MyApp(cartProvider: cartProvider));
     await tester.pumpAndSettle();
 
     // Til o'zgartirish ikonkasi (language icon) borligini tekshirish

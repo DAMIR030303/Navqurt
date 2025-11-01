@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
 import '../models/cart_item.dart';
+import '../services/cart_storage_service.dart';
 
 /// Savat provider (state management)
 class CartProvider extends ChangeNotifier {
-  final List<CartItem> _items = [];
+  List<CartItem> _items = [];
+  bool _isLoading = false;
+
+  bool get isLoading => _isLoading;
 
   /// Barcha savat elementlari
   List<CartItem> get items => _items;
@@ -25,6 +29,24 @@ class CartProvider extends ChangeNotifier {
   /// Savat bo'shmi?
   bool get isEmpty => _items.isEmpty;
 
+  /// Savatni yuklash (ilova ochilganda)
+  Future<void> loadCart() async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      _items = await CartStorageService.loadCart();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  /// Savatni saqlash (har o'zgarishda)
+  Future<void> _saveCart() async {
+    await CartStorageService.saveCart(_items);
+  }
+
   /// Savatga mahsulot qo'shish
   void addItem(Product product) {
     final existingIndex = _items.indexWhere(
@@ -40,12 +62,14 @@ class CartProvider extends ChangeNotifier {
     }
 
     notifyListeners();
+    _saveCart();
   }
 
   /// Savatdan mahsulotni olib tashlash
   void removeItem(String productId) {
     _items.removeWhere((item) => item.product.id == productId);
     notifyListeners();
+    _saveCart();
   }
 
   /// Mahsulot sonini kamaytirish
@@ -58,6 +82,7 @@ class CartProvider extends ChangeNotifier {
         _items.removeAt(index);
       }
       notifyListeners();
+      _saveCart();
     }
   }
 
@@ -67,6 +92,7 @@ class CartProvider extends ChangeNotifier {
     if (index >= 0) {
       _items[index].quantity++;
       notifyListeners();
+      _saveCart();
     }
   }
 
@@ -74,6 +100,7 @@ class CartProvider extends ChangeNotifier {
   void clear() {
     _items.clear();
     notifyListeners();
+    _saveCart();
   }
 
   /// Bitta mahsulot sonini o'rnatish
@@ -87,6 +114,7 @@ class CartProvider extends ChangeNotifier {
     if (index >= 0) {
       _items[index].quantity = quantity;
       notifyListeners();
+      _saveCart();
     }
   }
 }
