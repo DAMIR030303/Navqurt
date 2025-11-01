@@ -43,3 +43,13 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Android local properties (mahalliy SDK yo'llari)
+android/local.properties
+**/local.properties
+
+# Flutter ephemeral fayllari (auto-generated)
+**/ephemeral/
+**/flutter/ephemeral/
+ios/Flutter/ephemeral/
+linux/flutter/ephemeral/
