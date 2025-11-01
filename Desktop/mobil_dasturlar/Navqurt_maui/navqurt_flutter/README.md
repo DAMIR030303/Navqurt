@@ -1,5 +1,7 @@
 # NavQurut Flutter Mini App
 
+[![Xcode - Build and Analyze](https://github.com/DAMIR030303/Navqurt/actions/workflows/objective-c-xcode.yml/badge.svg)](https://github.com/DAMIR030303/Navqurt/actions/workflows/objective-c-xcode.yml)
+
 NavQurut mahsulotlari uchun Flutter mobil ilovasi - **Arch Linux'da to'liq ishlaydi!** 🎉
 
 ## 🎯 Xususiyatlar
