@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "ai-boshqaruv-backend/api/proto/auth";
+
+import "google/protobuf/timestamp.proto";
+
+// LoginRequest
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+// LoginResponse
+message LoginResponse {
+  string token = 1;
+  string refresh_token = 2;
+  User user = 3;
+  google.protobuf.Timestamp expires_at = 4;
+}
+
+// User message
+message User {
+  int64 id = 1;
+  string email = 2;
+  string name = 3;
+  string role = 4;
+  int64 company_id = 5;
+}
+
+// RegisterRequest
+message RegisterRequest {
+  string email = 1;
+  string password = 2;
+  string name = 3;
+  string company_name = 4;
+}
+
+// RegisterResponse
+message RegisterResponse {
+  string token = 1;
+  User user = 2;
+}
+
+// ValidateTokenRequest
+message ValidateTokenRequest {
+  string token = 1;
+}
+
+// ValidateTokenResponse
+message ValidateTokenResponse {
+  bool valid = 1;
+  User user = 2;
+}
+
+// RefreshTokenRequest
+message RefreshTokenRequest {
+  string refresh_token = 1;
+}
+
+// RefreshTokenResponse
+message RefreshTokenResponse {
+  string token = 1;
+  string refresh_token = 2;
+  google.protobuf.Timestamp expires_at = 3;
+}
+
+// AuthService
+service AuthService {
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse);
+  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse);
+}
+
+
+

@@ -1,0 +1,122 @@
+syntax = "proto3";
+
+package task;
+
+option go_package = "ai-boshqaruv-backend/api/proto/task";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+// DailyTask message
+message DailyTask {
+  int64 id = 1;
+  int64 position_id = 2;
+  string name = 3;
+  string description = 4;
+  string frequency = 5; // daily, weekly, monthly, as_needed
+  string priority = 6; // high, medium, low
+  double kpi_weight = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+}
+
+// EmployeeTask message
+message EmployeeTask {
+  int64 id = 1;
+  int64 employee_id = 2;
+  int64 task_id = 3;
+  string completed_date = 4; // YYYY-MM-DD
+  string status = 5; // pending, in_progress, completed, overdue
+  double quality_score = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+// CreateTaskRequest
+message CreateTaskRequest {
+  int64 position_id = 1;
+  string name = 2;
+  string description = 3;
+  string frequency = 4;
+  string priority = 5;
+  double kpi_weight = 6;
+}
+
+// GetTaskRequest
+message GetTaskRequest {
+  int64 id = 1;
+}
+
+// ListTasksRequest
+message ListTasksRequest {
+  int64 position_id = 1; // optional, filter by position
+  string frequency = 2; // optional, filter by frequency
+  int32 page = 3;
+  int32 page_size = 4;
+}
+
+// ListTasksResponse
+message ListTasksResponse {
+  repeated DailyTask tasks = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 page_size = 4;
+}
+
+// UpdateTaskRequest
+message UpdateTaskRequest {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  string frequency = 4;
+  string priority = 5;
+  double kpi_weight = 6;
+}
+
+// DeleteTaskRequest
+message DeleteTaskRequest {
+  int64 id = 1;
+}
+
+// AssignTaskRequest
+message AssignTaskRequest {
+  int64 employee_id = 1;
+  int64 task_id = 2;
+  string completed_date = 3; // YYYY-MM-DD
+}
+
+// CompleteTaskRequest
+message CompleteTaskRequest {
+  int64 id = 1;
+  string status = 2;
+  double quality_score = 3;
+}
+
+// GetTaskMetricsRequest
+message GetTaskMetricsRequest {
+  int64 employee_id = 1;
+  string period = 2; // daily, weekly, monthly
+}
+
+// GetTaskMetricsResponse
+message GetTaskMetricsResponse {
+  int32 total_tasks = 1;
+  int32 completed_tasks = 2;
+  int32 pending_tasks = 3;
+  int32 overdue_tasks = 4;
+  double average_quality_score = 5;
+  double completion_rate = 6;
+}
+
+// TaskService
+service TaskService {
+  rpc CreateTask(CreateTaskRequest) returns (DailyTask);
+  rpc GetTask(GetTaskRequest) returns (DailyTask);
+  rpc ListTasks(ListTasksRequest) returns (ListTasksResponse);
+  rpc UpdateTask(UpdateTaskRequest) returns (DailyTask);
+  rpc DeleteTask(DeleteTaskRequest) returns (google.protobuf.Empty);
+  rpc AssignTask(AssignTaskRequest) returns (EmployeeTask);
+  rpc CompleteTask(CompleteTaskRequest) returns (EmployeeTask);
+  rpc GetTaskMetrics(GetTaskMetricsRequest) returns (GetTaskMetricsResponse);
+}
+

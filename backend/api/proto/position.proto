@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package position;
+
+option go_package = "ai-boshqaruv-backend/api/proto/position";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+// Position message
+message Position {
+  int64 id = 1;
+  int64 company_id = 2;
+  string name = 3;
+  string description = 4;
+  string department = 5;
+  int32 max_employees = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+// CreatePositionRequest
+message CreatePositionRequest {
+  int64 company_id = 1;
+  string name = 2;
+  string description = 3;
+  string department = 4;
+  int32 max_employees = 5;
+}
+
+// GetPositionRequest
+message GetPositionRequest {
+  int64 id = 1;
+}
+
+// ListPositionsRequest
+message ListPositionsRequest {
+  int64 company_id = 1;
+  int32 page = 2;
+  int32 page_size = 3;
+  string search = 4;
+  string department = 5;
+}
+
+// ListPositionsResponse
+message ListPositionsResponse {
+  repeated Position positions = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 page_size = 4;
+}
+
+// UpdatePositionRequest
+message UpdatePositionRequest {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  string department = 4;
+  int32 max_employees = 5;
+}
+
+// DeletePositionRequest
+message DeletePositionRequest {
+  int64 id = 1;
+}
+
+// PositionService
+service PositionService {
+  rpc CreatePosition(CreatePositionRequest) returns (Position);
+  rpc GetPosition(GetPositionRequest) returns (Position);
+  rpc ListPositions(ListPositionsRequest) returns (ListPositionsResponse);
+  rpc UpdatePosition(UpdatePositionRequest) returns (Position);
+  rpc DeletePosition(DeletePositionRequest) returns (google.protobuf.Empty);
+}
+

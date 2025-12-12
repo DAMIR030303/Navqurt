@@ -1,0 +1,41 @@
+{
+  "name": "AI Boshqaruv - Xodimlar Boshqarish Tizimi",
+  "short_name": "AI Boshqaruv",
+  "description": "Zamonaviy xodimlar boshqaruvi, KPI monitoring va biznes jarayonlarini avtomatlashtirish tizimi",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6366f1",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity", "utilities"],
+  "shortcuts": [
+    {
+      "name": "Xodimlar",
+      "short_name": "Xodimlar",
+      "description": "Xodimlar ro'yxatini ko'rish",
+      "url": "/?page=employees",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Davomat",
+      "short_name": "Davomat",
+      "description": "Davomatni ko'rish",
+      "url": "/?page=attendance",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    }
+  ]
+}
