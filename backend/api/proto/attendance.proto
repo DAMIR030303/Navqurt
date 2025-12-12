@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package attendance;
+
+option go_package = "ai-boshqaruv-backend/api/proto/attendance";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+// Attendance message
+message Attendance {
+  int64 id = 1;
+  int64 employee_id = 2;
+  google.protobuf.Timestamp check_in = 3;
+  google.protobuf.Timestamp check_out = 4;
+  string status = 5; // present, absent, late, on_time
+  int32 minutes_late = 6;
+  google.protobuf.Timestamp date = 7;
+}
+
+// CheckInRequest
+message CheckInRequest {
+  int64 employee_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+}
+
+// CheckOutRequest
+message CheckOutRequest {
+  int64 employee_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+}
+
+// GetAttendanceRequest
+message GetAttendanceRequest {
+  int64 employee_id = 1;
+  google.protobuf.Timestamp start_date = 2;
+  google.protobuf.Timestamp end_date = 3;
+}
+
+// GetAttendanceResponse
+message GetAttendanceResponse {
+  repeated Attendance attendances = 1;
+  int32 total_days = 2;
+  int32 present_days = 3;
+  int32 absent_days = 4;
+  int32 late_days = 5;
+}
+
+// AttendanceService
+service AttendanceService {
+  rpc CheckIn(CheckInRequest) returns (Attendance);
+  rpc CheckOut(CheckOutRequest) returns (Attendance);
+  rpc GetAttendance(GetAttendanceRequest) returns (GetAttendanceResponse);
+}
+
+
+

@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package finance;
+
+option go_package = "ai-boshqaruv-backend/api/proto/finance";
+
+import "google/protobuf/timestamp.proto";
+
+// Salary message
+message Salary {
+  int64 id = 1;
+  int64 employee_id = 2;
+  double base_salary = 3;
+  double kpi_bonus = 4;
+  double attendance_bonus = 5;
+  double penalties = 6;
+  double total = 7;
+  string period = 8; // Format: YYYY-MM
+  google.protobuf.Timestamp created_at = 9;
+}
+
+// Transaction message
+message Transaction {
+  int64 id = 1;
+  int64 company_id = 2;
+  string type = 3; // income, expense
+  double amount = 4;
+  string description = 5;
+  string category = 6;
+  google.protobuf.Timestamp date = 7;
+  google.protobuf.Timestamp created_at = 8;
+}
+
+// CalculateSalaryRequest
+message CalculateSalaryRequest {
+  int64 employee_id = 1;
+  string period = 2; // Format: YYYY-MM
+}
+
+// CalculateSalaryResponse
+message CalculateSalaryResponse {
+  Salary salary = 1;
+  string formula_breakdown = 2;
+}
+
+// GetSalaryHistoryRequest
+message GetSalaryHistoryRequest {
+  int64 employee_id = 1;
+  int32 limit = 2;
+}
+
+// GetSalaryHistoryResponse
+message GetSalaryHistoryResponse {
+  repeated Salary salaries = 1;
+}
+
+// GetTransactionsRequest
+message GetTransactionsRequest {
+  int64 company_id = 1;
+  string type = 2; // income, expense, or empty for all
+  google.protobuf.Timestamp start_date = 3;
+  google.protobuf.Timestamp end_date = 4;
+  int32 page = 5;
+  int32 page_size = 6;
+}
+
+// GetTransactionsResponse
+message GetTransactionsResponse {
+  repeated Transaction transactions = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 page_size = 4;
+}
+
+// GetReportsRequest
+message GetReportsRequest {
+  int64 company_id = 1;
+  google.protobuf.Timestamp start_date = 2;
+  google.protobuf.Timestamp end_date = 3;
+}
+
+// GetReportsResponse
+message GetReportsResponse {
+  double total_income = 1;
+  double total_expense = 2;
+  double balance = 3;
+  double total_salaries = 4;
+  repeated Transaction top_expenses = 5;
+}
+
+// FinanceService
+service FinanceService {
+  rpc CalculateSalary(CalculateSalaryRequest) returns (CalculateSalaryResponse);
+  rpc GetSalaryHistory(GetSalaryHistoryRequest) returns (GetSalaryHistoryResponse);
+  rpc GetTransactions(GetTransactionsRequest) returns (GetTransactionsResponse);
+  rpc GetReports(GetReportsRequest) returns (GetReportsResponse);
+}
+
+
+

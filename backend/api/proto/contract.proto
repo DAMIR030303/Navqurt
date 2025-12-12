@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package contract;
+
+option go_package = "ai-boshqaruv-backend/api/proto/contract";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+// Contract message
+message Contract {
+  int64 id = 1;
+  int64 employee_id = 2;
+  int64 position_id = 3;
+  string contract_type = 4; // full_time, part_time, contractor, intern
+  string start_date = 5; // YYYY-MM-DD
+  string end_date = 6; // YYYY-MM-DD (optional)
+  int32 probation_period_days = 7;
+  string terms_json = 8; // JSON string
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
+}
+
+// CreateContractRequest
+message CreateContractRequest {
+  int64 employee_id = 1;
+  int64 position_id = 2;
+  string contract_type = 3;
+  string start_date = 4;
+  string end_date = 5;
+  int32 probation_period_days = 6;
+  string terms_json = 7;
+}
+
+// GetContractRequest
+message GetContractRequest {
+  int64 id = 1;
+}
+
+// ListContractsRequest
+message ListContractsRequest {
+  int64 employee_id = 1; // optional, filter by employee
+  int64 position_id = 2; // optional, filter by position
+  int32 page = 3;
+  int32 page_size = 4;
+}
+
+// ListContractsResponse
+message ListContractsResponse {
+  repeated Contract contracts = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 page_size = 4;
+}
+
+// UpdateContractRequest
+message UpdateContractRequest {
+  int64 id = 1;
+  string contract_type = 2;
+  string start_date = 3;
+  string end_date = 4;
+  int32 probation_period_days = 5;
+  string terms_json = 6;
+}
+
+// DeleteContractRequest
+message DeleteContractRequest {
+  int64 id = 1;
+}
+
+// ContractService
+service ContractService {
+  rpc CreateContract(CreateContractRequest) returns (Contract);
+  rpc GetContract(GetContractRequest) returns (Contract);
+  rpc ListContracts(ListContractsRequest) returns (ListContractsResponse);
+  rpc UpdateContract(UpdateContractRequest) returns (Contract);
+  rpc DeleteContract(DeleteContractRequest) returns (google.protobuf.Empty);
+}
+

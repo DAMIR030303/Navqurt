@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package storage;
+
+option go_package = "ai-boshqaruv-backend/api/proto/storage";
+
+import "google/protobuf/empty.proto";
+
+// UploadFileRequest
+message UploadFileRequest {
+  string filename = 1;
+  bytes content = 2;
+  string content_type = 3;
+  string bucket = 4;
+}
+
+// UploadFileResponse
+message UploadFileResponse {
+  string url = 1;
+  string file_id = 2;
+  int64 size = 3;
+}
+
+// DeleteFileRequest
+message DeleteFileRequest {
+  string file_id = 1;
+  string bucket = 2;
+}
+
+// StorageService
+service StorageService {
+  rpc UploadFile(UploadFileRequest) returns (UploadFileResponse);
+  rpc DeleteFile(DeleteFileRequest) returns (google.protobuf.Empty);
+}
+

@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package kpi;
+
+option go_package = "ai-boshqaruv-backend/api/proto/kpi";
+
+import "google/protobuf/timestamp.proto";
+
+// KPIMetric message
+message KPIMetric {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  string unit = 4;
+  double target = 5;
+  double current = 6;
+  double percentage = 7;
+}
+
+// EmployeeKPI message
+message EmployeeKPI {
+  int64 employee_id = 1;
+  string employee_name = 2;
+  repeated KPIMetric metrics = 3;
+  double overall_score = 4;
+  int32 rank = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+// CalculateKPIRequest
+message CalculateKPIRequest {
+  int64 employee_id = 1;
+  string period = 2; // monthly, weekly, daily
+}
+
+// CalculateKPIResponse
+message CalculateKPIResponse {
+  EmployeeKPI kpi = 1;
+  double bonus_amount = 2;
+}
+
+// GetKPIMetricsRequest
+message GetKPIMetricsRequest {
+  int64 employee_id = 1;
+  string period = 2;
+}
+
+// GetKPIMetricsResponse
+message GetKPIMetricsResponse {
+  EmployeeKPI kpi = 1;
+}
+
+// StreamKPIUpdatesRequest
+message StreamKPIUpdatesRequest {
+  int64 employee_id = 1;
+}
+
+// StreamKPIUpdatesResponse
+message StreamKPIUpdatesResponse {
+  EmployeeKPI kpi = 1;
+  google.protobuf.Timestamp timestamp = 2;
+}
+
+// KPIService
+service KPIService {
+  rpc CalculateKPI(CalculateKPIRequest) returns (CalculateKPIResponse);
+  rpc GetKPIMetrics(GetKPIMetricsRequest) returns (GetKPIMetricsResponse);
+  rpc StreamKPIUpdates(StreamKPIUpdatesRequest) returns (stream StreamKPIUpdatesResponse);
+}
+
+
+
