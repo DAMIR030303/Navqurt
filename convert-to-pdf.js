@@ -1,4 +1,3 @@
-const { execSync } = require('child_process');
 const fs = require('fs');
 
 // Markdown faylni o'qish
@@ -33,5 +32,3 @@ ${markdown.replace(/\n/g, '<br>').replace(/```/g, '<pre>').replace(/`/g, '<code>
 `;
 
 fs.writeFileSync('AI_BOSHQARUV_HISOBOT.html', html);
-console.log('HTML fayl yaratildi: AI_BOSHQARUV_HISOBOT.html');
-console.log('PDF ga aylantirish uchun brauzerda ochib, Print > Save as PDF qiling');

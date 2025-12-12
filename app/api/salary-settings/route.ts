@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 // Salary settings API - for now returns mock data
 // This will be implemented when position_salary_settings table is fully integrated
-export async function GET(_request: NextRequest) {
+export async function GET() {
   try {
     // TODO: Implement actual database query when backend service is ready
     // For now, return mock data structure

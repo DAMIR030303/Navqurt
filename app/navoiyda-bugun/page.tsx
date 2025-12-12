@@ -72,9 +72,9 @@ export default function NavoiydaBugunDashboard() {
         router.push('/')
         return
       }
-      
       setIsLoading(false)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router, user])
 
   useEffect(() => {

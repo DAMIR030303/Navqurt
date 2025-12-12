@@ -24,7 +24,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { logger } from "@/lib/logger"
-import { cn } from "@/lib/utils"
 
 interface Contract {
   id: number

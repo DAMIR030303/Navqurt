@@ -13,7 +13,7 @@ interface LoginPageProps {
   redirectPath?: string
 }
 
-export function LoginPage({ onLogin, redirectPath }: LoginPageProps) {
+export function LoginPage({ onLogin }: LoginPageProps) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
@@ -30,6 +30,7 @@ export function LoginPage({ onLogin, redirectPath }: LoginPageProps) {
         setRememberMe(true)
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -55,7 +56,7 @@ export function LoginPage({ onLogin, redirectPath }: LoginPageProps) {
       let data
       try {
         data = await response.json()
-      } catch (parseErr) {
+      } catch {
         setError('Server javobini o\'qib bo\'lmadi')
         setIsLoading(false)
         return
